@@ -1,0 +1,34 @@
+---
+title: "Miles per gallon report"
+author: "Piya Thavornwong"
+date: "12/6/2019"
+output: html_document
+---
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(readxl)
+mpg_df <- read_excel("~/Documents/Hult/Dual Degree/Module A/R/Class 9/auto_mpg.xls")
+
+logit_mpg <- glm(mpg_good_bad~cylinders+displacement+horsepower+weight+acceleration+model_year+orogin, data= mpg_df, family = "binomial")
+summary(logit_mpg)
+
+
+```
+
+## Hey senior leader. This is your business insight
+
+The acceleration is not important in considering mpg of the car. Increasing in 1 unit of horsepower, will decrease a chance of being <30 mph car by 6.5%
+
+```{r tree, echo=FALSE}
+library(rpart)
+library(rpart.plot)
+
+tree_mpg <- rpart(mpg_good_bad~cylinders+displacement+horsepower+weight+acceleration+model_year+orogin, data= mpg_df, method = "class")
+rpart.plot(tree_mpg, extra = 1, type = 1)
+```
+
+## Insight from Decision Tree
+
+Horsepower and model year are important in analyzing mpg of the car. However, cylinders, displacement, and weight are not important in the decision tree model.
